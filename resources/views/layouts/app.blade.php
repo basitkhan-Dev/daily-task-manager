@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Admin Panel')</title>
+    <title inertia>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    @vite('resources/js/app.js')
+    @inertiaHead
 </head>
-<body>
-
+<body class="bg-gray-100 font-sans">
+@inertia
 <div class="wrapper">
     {{-- Sidebar --}}
     <div class="sidebar">
         <h2>Admin</h2>
-        <a href="{{ route('dashboard') }}">Dashboard</a>
-        <a href="#">Task Manager</a>
-        <a href="#">Users</a>
-        <a href="#">Settings</a>
-        <a href="#">Logout</a>
+       <a href="{{ route('dashboard') }}">Dashboard</a>
+        <a href="{{ route('tasks.create') }}">Create Task</a>
+        <a href="{{ route('tasks.index') }}">View Tasks</a>
+
     </div>
 
     {{-- Main Content Area --}}
