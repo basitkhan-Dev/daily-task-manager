@@ -12,9 +12,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::latest()->get();
-        return Inertia::render('Tasks/Index', [
-            'tasks' => $tasks
+         $tasks = Task::orderByDesc('created_at')->get();
+
+        return Inertia::render('Tasks/ListTasks', [
+            'tasks' => $tasks,
         ]);
     }
 
@@ -53,7 +54,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-       return view('tasks.edit', compact('task'));
+        return Inertia::render('Tasks/EditTask', [
+            'task' => $task
+        ]);
     }
 
     /**
@@ -61,13 +64,15 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-         $request->validate([
-            'title' => 'required',
-            'due_date' => 'nullable|date',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'due_date' => 'required|date',
         ]);
 
-        $task->update($request->all());
-        return redirect()->route('tasks.index')->with('success', 'Task updated.');  
+        $task->update($validated);
+
+        return redirect()->route('dashboard')->with('success', 'Task updated successfully.');
     }
 
     /**
